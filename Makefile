@@ -9,7 +9,7 @@ PREFIX ?= sh-unknown-elf
 
 #possible choices : SH7058 SH7055_18 SH7055_35 SH7051
 #try "make BUILDWHAT=SH7055_18" to override this default.
-BUILDWHAT ?= SH7058
+BUILDWHAT ?= SH7052
 
 # Specify compiler to be used
 CC = $(PREFIX)-gcc
@@ -46,7 +46,8 @@ CPFLAGS = $(CPU) $(DBGFLAGS) $(OPT) -fomit-frame-pointer -std=gnu99 -Wall -Wextr
 LDFLAGS = $(CPU) -nostartfiles -T$(LDSCRIPT) -Wl,-Map=$(PROJECT).map,--cref,--gc-sections
 
 
-ASRC = start_705x.s
+#ASRC = start_705x.s
+ASRC = start_mmc.s
 
 SRC = cmd_parser.c eep_funcs.c main.c crc.c
 
@@ -54,6 +55,9 @@ ifeq ($(BUILDWHAT), SH7051)
 	SRC += platf_7050.c pl_flash_7051.c
 else ifeq ($(BUILDWHAT), SH7055_35)
 	SRC += platf_7055.c pl_flash_7055_350nm.c
+else ifeq ($(BUILDWHAT), SH7052)
+	#super new 7052
+	SRC += platf_7052.c pl_flash_7052.c
 else
 	#new 7055 or 7058, 180nm
 	SRC += platf_7055.c pl_flash_705x_180nm.c
@@ -62,6 +66,8 @@ endif
 
 ifeq ($(BUILDWHAT), SH7051)
 	LDSCRIPT = lkr_7051.ld
+else ifeq ($(BUILDWHAT), SH7052)
+	LDSCRIPT = lkr_mmc_7052.ld
 else
 	LDSCRIPT = lkr_7055_7058.ld
 endif

@@ -97,6 +97,18 @@
 		#error invalid target for ssmk
 	#endif
 #endif
+#elif defined(mmc)
+	#define WDT_MAXCNT 4125 //aim for 6.6ms , although it probably works at 2ms anyway
+	#if defined(SH7052)
+		#include "reg_defines/7052.h"
+		#define RAM_MIN	0xFFFF8000
+		#define RAM_MAX 	0xFFFFAFFF
+		#define NPK_SCI SCI0
+	
+	#else
+		#error invalid target for mmc
+	#endif
+#endif
 
 
 
